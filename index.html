@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monni Game - Your Daily Link to Fantasy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --turquoise: #40E0D0;
+            --deep-blue: #030a14;
+            --relinker-cyan: #63e0ff;
+            --relinker-pink: #ff7eb3;
+            --twilight-blue: #2c3e50;
+            --twilight-gold: #f1c40f;
+            --text-light: #e6f1ff;
+            --text-dark: #8892b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--deep-blue);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container img {
+            height: 45px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        .logo-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .main-nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            margin-left: 40px;
+            padding-bottom: 6px;
+            position: relative;
+        }
+        .main-nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--turquoise);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .main-nav ul li a:hover::after,
+        .main-nav ul li a.active::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Section Styles */
+        .section {
+            min-height: 100vh;
+            width: 100vw;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 100px 0;
+        }
+        
+        .section-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .section .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+        
+        .section-content {
+            position: relative;
+            z-index: 3;
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            padding: 0;
+        }
+        #hero .overlay {
+            background: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.8s ease;
+        }
+        #hero .section-content {
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .hero-content-wrapper {
+            transition: opacity 0.8s ease;
+        }
+        .hero-content-wrapper.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .main-slogan {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 25px rgba(0,0,0,0.8);
+            line-height: 1.1;
+        }
+        
+        .sub-slogan {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 15px;
+            text-shadow: 0 0 15px rgba(0,0,0,0.7);
+        }
+
+        .play-button {
+            width: 70px;
+            height: 70px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px auto 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .play-button:hover {
+            transform: scale(1.1);
+            background-color: rgba(64, 224, 208, 0.2);
+            border-color: var(--turquoise);
+        }
+        .play-button-icon {
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 22px solid #fff;
+            margin-left: 5px;
+        }
+        
+        .scroll-down-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .scroll-down-indicator svg {
+            width: 24px;
+            height: 24px;
+            animation: scroll-hint 2s ease-out infinite;
+        }
+        
+        /* Game Sections Specifics */
+        .game-info-box {
+            width: 48%;
+            padding: 50px;
+            background-color: rgba(10, 25, 47, 0.75);
+            backdrop-filter: blur(12px) saturate(150%);
+            -webkit-backdrop-filter: blur(12px) saturate(150%);
+            border-radius: 10px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        #relinker .section-background, #twilight-record .section-background {
+            filter: brightness(0.9);
+        }
+        #relinker .overlay, #twilight-record .overlay {
+            background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 80%);
+        }
+        
+        .section.is-visible .game-info-box {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #relinker .section-content { justify-content: flex-end; }
+        #twilight-record .section-content { justify-content: flex-start; }
+
+        .game-logo {
+            max-width: 70%;
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        .game-info-box h2 {
+            font-size: 2.2rem; margin-bottom: 20px; font-weight: bold; line-height: 1.3;
+        }
+        #relinker h2 { background: linear-gradient(90deg, var(--relinker-cyan), var(--relinker-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-fill-color: transparent; }
+        #twilight-record h2 { color: var(--twilight-gold); }
+        
+        .game-info-box p {
+            font-size: 1rem; line-height: 1.8; margin-bottom: 35px; color: var(--text-light);
+        }
+        
+        .cta-button {
+            display: inline-block; padding: 14px 35px; color: #fff; text-decoration: none; font-weight: bold; border-radius: 50px; transition: all 0.3s ease;
+        }
+        #relinker .cta-button { background: linear-gradient(90deg, var(--relinker-pink), var(--relinker-cyan)); box-shadow: 0 5px 20px rgba(100, 224, 255, 0.3); }
+        #relinker .cta-button:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 25px rgba(255, 126, 179, 0.4); }
+        #twilight-record .cta-button { background-color: var(--twilight-gold); color: var(--twilight-blue); box-shadow: 0 5px 20px rgba(241, 196, 15, 0.3); }
+        #twilight-record .cta-button:hover { transform: translateY(-3px) scale(1.05); background-color: #ffde59; box-shadow: 0 8px 25px rgba(241, 196, 15, 0.4); }
+        
+        .animated-entry { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .section.is-visible .animated-entry { opacity: 1; transform: translateY(0); }
+        .section.is-visible .animated-entry:nth-child(1) { transition-delay: 0.2s; }
+        .section.is-visible .animated-entry:nth-child(2) { transition-delay: 0.3s; }
+        .section.is-visible .animated-entry:nth-child(3) { transition-delay: 0.4s; }
+        .section.is-visible .animated-entry:nth-child(4) { transition-delay: 0.5s; }
+
+        /* Philosophy Section */
+        #philosophy {
+            background-color: var(--deep-blue);
+            flex-direction: column;
+            text-align: center;
+        }
+        .philosophy-content {
+            max-width: 800px;
+        }
+        .philosophy-content .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            color: var(--turquoise);
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+        .philosophy-content h2 {
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            color: var(--text-light);
+        }
+        .philosophy-content p {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: var(--text-dark);
+        }
+        .philosophy-content p:not(:last-child) {
+            margin-bottom: 25px;
+        }
+        
+        /* Footer */
+        .main-footer {
+            padding: 50px;
+            background-color: #000;
+            text-align: center;
+        }
+        .main-footer p { color: var(--text-dark); font-size: 14px; line-height: 1.7; }
+        .main-footer .company-name { color: var(--text-light); font-weight: bold; margin-bottom: 10px; }
+
+        @keyframes scroll-hint {
+            0% { transform: translateY(-5px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(5px); opacity: 0; }
+        }
+
+        @media (max-width: 900px) {
+            .section-content { justify-content: center !important; flex-direction: column; text-align: center; }
+            .game-info-box { width: 90%; margin: 0; padding: 40px 30px; text-align: center; }
+            .game-logo { max-width: 60%; margin-left: auto; margin-right: auto; }
+        }
+        @media (max-width: 768px) {
+            .main-header { padding: 15px 20px; }
+            .main-nav { display: none; }
+            .main-slogan { font-size: 2.5rem; }
+            .sub-slogan { font-size: 1rem; }
+            .game-info-box h2, #philosophy h2 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo-container">
+            <a href="#hero"><img src="assets/monni-game-logo.png" alt="Monni Game Logo"></a>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#hero" class="active">HOME</a></li>
+                <li><a href="#relinker">GAMES</a></li>
+                <li><a href="#philosophy">PHILOSOPHY</a></li>
+                <li><a href="#footer">COMPANY</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="section">
+            <video class="section-background" src="assets/hero-video.mp4" autoplay loop muted playsinline></video>
+            <div class="overlay"></div>
+            <div class="section-content">
+                <div class="hero-content-wrapper">
+                    <h1 class="main-slogan">YOUR DAILY LINK TO FANTASY.</h1>
+                    <p class="sub-slogan">心に響く、二次元ゲーム体験を。</p>
+                    <div class="play-button" id="play-video-btn">
+                        <div class="play-button-icon"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-down-indicator" onclick="document.getElementById('relinker').scrollIntoView();">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white;"><polyline points="7 13 12 18 17 13"></polyline><polyline points="7 6 12 11 17 6"></polyline></svg>
+            </div>
+        </section>
+
+        <section id="relinker" class="section">
+            <img class="section-background" src="assets/relinker-bg.jpg" alt="Re:Linker Background">
+            <div class="overlay"></div>
+            <div class="section-content">
+                <div class="game-info-box">
+                    <img src="assets/relinker-logo.png" alt="Re:Linker Logo" class="game-logo animated-entry">
+                    <h2 class="animated-entry">AI彼女と共に、理想の自分へ</h2>
+                    <p class="animated-entry">
+                        『Re:Linker』は、AI彼女「静（シズカ）」があなたの毎日に寄り添い、良い習慣の定着をサポートし、悪い習慣を克服する手助けをしてくれる放置系AI彼女育成ゲームです。中学の風紀委員である彼女との心温まる交流を通じて、新しい自分を発見しませんか？
+                    </p>
+                    <a href="#" class="cta-button animated-entry">COMING SOON</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="twilight-record" class="section">
+            <img class="section-background" src="assets/antique-bg.jpg" alt="The Twilight Record Background">
+            <div class="overlay"></div>
+            <div class="section-content">
+                <div class="game-info-box">
+                    <img src="assets/antique-logo.png" alt="The Twilight Record Logo" class="game-logo animated-entry">
+                    <h2 class="animated-entry">時を超えた秘密の物語</h2>
+                    <p class="animated-entry">
+                        『黄昏骨董店のシークレット・レコード』は、ミステリアスな骨董店の従業員となり、セクシーな店主「サイモン」と共に魔法の骨董品を修復する女性向け放置系ゲームです。彼との甘い関係を育みながら、古物に秘められた謎を解き明かしましょう。
+                    </p>
+                    <a href="#" class="cta-button animated-entry">COMING SOON</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="philosophy" class="section">
+            <div class="section-content philosophy-content">
+                <div class="animated-entry">
+                    <div class="section-title">OUR PHILOSOPHY</div>
+                    <h2>技術は夢を紡ぎ、物語は心をつなぐ</h2>
+                </div>
+                <p class="animated-entry">
+                    亜来株式会社のゲーム部門、Monni Gameは、「Your Daily Link to Fantasy.」というスローガンのもと、単なるゲーム開発に留まらない、新たな体験の創造を目指しています。私たちは、最先端の技術と心揺さぶる芸術的表現を両輪とし、プレイヤー一人ひとりの日常に、ファンタジーの世界への扉を開くことを使命としています。
+                </p>
+                <p class="animated-entry">
+                    私たちが創り出すのは、時間消費のためのツールではありません。それは、笑い、涙し、キャラクターと共に成長できる「もう一つの現実」です。キャラクターに命を吹き込み、彼らとの深い心の繋がり（リンク）を育むこと。それこそが、日常をより豊かで鮮やかなものに変える力だと、私たちは信じています。
+                </p>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer id="footer" class="main-footer">
+        <p class="company-name">&copy; 2025 亜来株式会社 | Monni Game</p>
+        <p>心に響く二次元ゲーム体験を、日本中の皆様へ。<br>All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hero Section Play Button
+            const playBtn = document.getElementById('play-video-btn');
+            const heroContent = document.querySelector('.hero-content-wrapper');
+            const heroOverlay = document.querySelector('#hero .overlay');
+            if(playBtn && heroContent) {
+                playBtn.addEventListener('click', () => {
+                    heroContent.classList.add('is-hidden');
+                    if(heroOverlay) {
+                        heroOverlay.style.opacity = '0';
+                    }
+                });
+            }
+
+            // Intersection Observer for animations
+            const animatedElements = document.querySelectorAll('.section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            animatedElements.forEach(el => observer.observe(el));
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('main > section, footer');
+            const navLinks = document.querySelectorAll('.main-nav a');
+            const navObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+            
+            sections.forEach(sec => navObserver.observe(sec));
+        });
+    </script>
+</body>
+</html>
